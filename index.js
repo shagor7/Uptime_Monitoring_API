@@ -1,15 +1,10 @@
 //title: uptime monitoring application
 //dependencies
 const http = require('http');
-const url = require('url');
+const {handleReqRes} = require('./helpers/handleReqRes')
 
 // app object -  module scaffolding
 const app = {};
-
-//configuration
-app.config = {
-    port: 3000,
-};
 
 // create server
 app.createServer = () => {
@@ -20,14 +15,6 @@ app.createServer = () => {
 };
 
 //handle request response
-app.handleReqRes = (req, res) => {
-    //request handeling
-    const parsedUrl = url.parse(req.url, true);
-    const path = parsedUrl.pathname;
-    console.log(path);
-    //response handle
-    res.end('Hello User!');
-};
-
+app.handleReqRes = handleReqRes;
 //start the server
 app.createServer();
