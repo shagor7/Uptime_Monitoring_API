@@ -6,7 +6,8 @@
 const data = require('../../lib/data');
 
 const {hash} = require('../../helpers/utilities');
-const {parseJSON} = require('../../helpers/utilities')
+const {parseJSON} = require('../../helpers/utilities');
+const tokenHandler = require('./tokenHandler');
 
 //module scaffolding
 const handler = {};
@@ -78,8 +79,13 @@ handler._users.get = (requestProperties, callback) => {
     const phone = typeof requestProperties.queryStringObject.phone === 'string' && requestProperties.queryStringObject.phone.trim().length === 11 ? requestProperties.queryStringObject.phone : false;
 
     if(phone) {
-        //lookup the user
-        data.read('users', phone, (err, us) => {
+        //verify token
+        let token = typeof requestProperties.headersObject.token === 'string' ? requestProperties.headersObject.token : false;
+
+        tokenHandler._token.verify(token, phone, (tokenid) => {
+            if(tokenid) {
+                //lookup the user
+            data.read('users', phone, (err, us) => {
             const user = {...parseJSON(us)};
             if(!err && user) {
                 delete user.password;
@@ -89,7 +95,13 @@ handler._users.get = (requestProperties, callback) => {
                     error: 'requested user was not found',
                 })
             }
-        })
+        });
+            } else {
+                callback(403, {
+                    error: 'dhur! authentication error',
+                });
+            }
+        });
     } else {
         callback(404, {
             error: 'requested user was not found',
@@ -108,7 +120,13 @@ handler._users.put = (requestProperties, callback) => {
 
     if(phone) {
         if( firstName || lastName || password) {
-            //lookup the user
+            //verify token
+        let token = typeof requestProperties.headersObject.token === 'string' ? requestProperties.headersObject.token : false;
+
+        tokenHandler._token.verify(token, phone, (tokenid) => {
+            if(tokenid) {
+                //lookup the user
+                //lookup the user
             data.read('users', phone, (err, usData) => {
                 const userData = {...parseJSON(usData)};
                 if(!err && userData) {
@@ -139,6 +157,12 @@ handler._users.put = (requestProperties, callback) => {
                     });
                 }
             });
+            } else {
+                callback(403, {
+                    error: 'dhur! authentication error',
+                });
+            }
+        });
         } else {
             callback(400, {
                 error: 'you have a problem in your request',
@@ -154,13 +178,19 @@ handler._users.put = (requestProperties, callback) => {
 handler._users.delete = (requestProperties, callback) => {
     const phone = typeof requestProperties.queryStringObject.phone === 'string' && requestProperties.queryStringObject.phone.trim().length === 11 ? requestProperties.queryStringObject.phone : false;
     if(phone) {
-        //llokup the user
+        //verify token
+        let token = typeof requestProperties.headersObject.token === 'string' ? requestProperties.headersObject.token : false;
+
+        tokenHandler._token.verify(token, phone, (tokenid) => {
+            if(tokenid) {
+                //lookup the user
+            //llokup the user
         data.read('users', phone, (err1, userData) => {
             if(!err1 && userData) {
                 data.delete('users', phone, (err2) => {
                     if(!err2) {
                         callback(200, {
-                            message : 'user was succesfully created! kono error khay nai!',
+                            message : 'user was succesfully deleted! kono error khay nai!',
                         });
                     } else {
                         callback(500, {
@@ -174,6 +204,13 @@ handler._users.delete = (requestProperties, callback) => {
                 })
             }
         });
+            } else {
+                callback(403, {
+                    error: 'dhur! authentication error',
+                });
+            }
+        });
+        
     } else {
         callback(400, {
             error: 'there was a problem genius!',
