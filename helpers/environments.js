@@ -12,12 +12,14 @@ environemnts.staging = {
     port: 3000,
     envName: 'staging',
     secretKey: 'shagor',
+    maxChecks: 5,
 };
 
 environemnts.production = {
     port: 5000,
     envName: 'production',
     secretKey: 'rogahs',
+    maxChecks: 5,
 };
 
 //determine which environement was passed
