@@ -236,13 +236,13 @@ handler._check.delete = (requestProperties, callback) => {
                 
                 tokenHandler._token.verify(token, parseJSON(checkData).userPhone, (tokenIsValid) => {
                     if(tokenIsValid){
-                        //delete the chek data
+                        //delete the check data
                         data.delete('checks', id, (err2) => {
                             if(!err2){
                                 data.read('users', parseJSON(checkData).userPhone, (err3, userData) => {
                                     let userObject = parseJSON(userData);
                                     if(!err3 && userData) { 
-                                        let userChecks = typeof(userObject.checks) === 'oject' && userObject.checks instanceof Array ? userObject.checks : [];
+                                        let userChecks = typeof userObject.checks === 'object' && userObject.checks instanceof Array ? userObject.checks : [];
                                         //remove the deleted check id from user's list of checks
 
                                         let checkPosition = userChecks.indexOf(id);

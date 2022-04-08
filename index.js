@@ -4,9 +4,13 @@ const http = require('http');
 const {handleReqRes} = require('./helpers/handleReqRes')
 const environement = require('./helpers/environments')
 const data = require('./lib/data');
+const { sendTwilioSms } = require('./helpers/notifications');
 // app object -  module scaffolding
 const app = {};
-
+//eitw pore muche dite hobe
+sendTwilioSms(01521217107, 'success', (err) => {
+    console.log(`shomossha hoitase giya hoilam`, err);
+});
 //testing file system
 //todo: pore muche dibo ne
 /*
