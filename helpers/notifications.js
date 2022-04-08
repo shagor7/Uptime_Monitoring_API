@@ -7,10 +7,13 @@
 
 //dependencies
 const https = require('https');
-const querystring = require('querystring');
+const { json } = require('stream/consumers');
+//const querystring = require('querystring');
+//const queryString = require('node:querystring');
 const { twilio } = require('./environments');
+const { parseJSON } = require('./utilities');
 
-//module scafoolding
+//module scafolding
 const notifications = {};
 
 //send sms to user using twilio api
@@ -23,16 +26,18 @@ notifications.sendTwilioSms = (phone, message, callback) => {
     if(userPhone && userMessage) {
         // configure the request payload
         const payload = {
+            Body: userMessage,
             From: twilio.fromPhone,
             To: `+88${userPhone}`,
-            Body: userMessage,
         };
         //stringify the payload
-        const stringifyPayload =  querystring.stringify(payload);
+        const stringifyPayload =  JSON.stringify(payload);
+        
+        //const stringifyPayload =  stringify(payload);
         //configure the request details
         const requestDetails = {
             hostname: 'api.twilio.com',
-            method: 'POST',
+            method: 'GET',
             path: `/2010-04-01/Accounts/${twilio.accountSid}/Messages.json`,
             auth: `${twilio.accountSid}:${twilio.authToken}`,
             headers: {
