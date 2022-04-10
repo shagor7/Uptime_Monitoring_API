@@ -58,11 +58,11 @@ handler._check.post = (requestProperties, callback) => {
                             let checkObject = {
                                 'id': checkid,
                                 userPhone,
-                                'protocol': protocol,
-                                'url': url,
-                                'method': method,
-                                "succesCodes": successCodes,
-                                "timeoutSeconds": timeoutSeconds,
+                                protocol,
+                                url,
+                                method,
+                                successCodes,
+                                timeoutSeconds,
                             };
                             //save the object
                             data.create('checks', checkid, checkObject, (err3) => {

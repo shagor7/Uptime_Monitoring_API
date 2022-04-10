@@ -7,11 +7,7 @@
 
 //dependencies
 const https = require('https');
-const { json } = require('stream/consumers');
-//const querystring = require('querystring');
-//const queryString = require('node:querystring');
 const { twilio } = require('./environments');
-const { parseJSON } = require('./utilities');
 
 //module scafolding
 const notifications = {};

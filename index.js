@@ -1,16 +1,22 @@
-//title: uptime monitoring application
+/*title: project initial file
+*description: initial file to start the node server and workers
+*authir: shagor
+*date: 9/4/2022
+*/
 //dependencies
-const http = require('http');
-const {handleReqRes} = require('./helpers/handleReqRes')
-const environement = require('./helpers/environments')
-const data = require('./lib/data');
-const { sendTwilioSms } = require('./helpers/notifications');
+const server =  require('./lib/server');
+const workers = require('./lib/worker');
+//const environement = require('./helpers/environments')
+//const data = require('./lib/data');
+//const { sendTwilioSms } = require('./helpers/notifications');
 // app object -  module scaffolding
 const app = {};
 //eitw pore muche dite hobe
+/*
 sendTwilioSms('01521217107', 'success', (err) => {
     console.log(`shomossha hoitase giya hoilam`, err);
 });
+*/
 //testing file system
 //todo: pore muche dibo ne
 /*
@@ -33,15 +39,14 @@ data.delete('test', 'newFile', (err) => {
     console.log(err);
 });
 */
-// create server
-app.createServer = () => {
-    const server = http.createServer(app.handleReqRes);
-    server.listen(environement.port, () => {
-        console.log(`listent to port ${environement.port}`);
-    });
+app.init = () => {
+    //start the server
+    server.init()
+    //start the workers
+    workers.init();
 };
 
-//handle request response
-app.handleReqRes = handleReqRes;
-//start the server
-app.createServer();
+app.init();
+
+// export the app
+module.exports = app;
